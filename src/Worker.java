@@ -1,0 +1,103 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Worker extends Thread{
+    static int i=0;
+    private int masterPort;
+    private int storagePort;
+    private Socket mastersocket;
+    private Socket storageSocket;
+    public static DataInputStream mdis;
+    public static DataOutputStream mdos;
+    public static DataInputStream sdis;
+    public static DataOutputStream sdos;
+    public Worker(int masterPort, int storagePort) {
+        this.masterPort = masterPort;
+        this.storagePort = storagePort;
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Logger.log(" Worker started");
+        List<String> final_Args=new ArrayList<>();
+        String argNum_temp=arg(args);
+        final_Args.add(argNum_temp);
+        int argNum=Integer.parseInt(argNum_temp);
+        List<String> arguments = new ArrayList<>();
+        for (int i = 0; i < argNum; i++) {
+            String t=arg(args);
+            arguments.add(t);
+            final_Args.add(t);
+        }
+        int masterPort=Integer.parseInt(arg(args));
+        final_Args.add(String.valueOf(masterPort));
+        int numWorker=Integer.parseInt(arg(args));
+        final_Args.add(String.valueOf(numWorker));
+        String Algorithm=arg(args);
+        final_Args.add(Algorithm);
+        if(Algorithm.equals("RR")){
+            String s=arg(args);
+            final_Args.add(s);
+            int qTime=Integer.parseInt(s);
+
+        }
+        String deadLockHandler=arg(args);
+        final_Args.add(deadLockHandler);
+
+        int StoragePort=Integer.parseInt(arg(args));
+        final_Args.add(String.valueOf(StoragePort));
+        String storageData=arg(args);
+
+        final_Args.add(storageData);
+        int TaskNum=Integer.parseInt(arg(args));
+        final_Args.add(String.valueOf(TaskNum));
+        List<String> Tasks=new ArrayList<String>();
+
+        for (int i = 0; i < TaskNum; i++) {
+            String t=arg(args);
+            Tasks.add(t);
+            final_Args.add(t);
+        }
+
+        //start worker
+        Worker worker=new Worker(masterPort,StoragePort);
+        worker.start();
+    }
+    public void start(){
+        try {
+            establishConnectionMaster(masterPort);
+            establishConnectionStorage(storagePort);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Do Work
+            }
+        });
+        thread.start();
+    }
+    private void establishConnectionMaster(int masterPort) throws IOException {
+        this.mastersocket = new Socket(InetAddress.getLocalHost(), masterPort);
+        mdis = new DataInputStream(mastersocket.getInputStream());
+        mdos = new DataOutputStream(mastersocket.getOutputStream());
+    }
+    private void establishConnectionStorage(int storagePort) throws IOException {
+        this.storageSocket = new Socket(InetAddress.getLocalHost(), storagePort);
+        sdis = new DataInputStream(storageSocket.getInputStream());
+        sdos = new DataOutputStream(storageSocket.getOutputStream());
+    }
+
+    public static String arg(String[] t) throws IOException {
+        String s=t[i];
+        i+=1;
+
+        return s;
+    }
+}
