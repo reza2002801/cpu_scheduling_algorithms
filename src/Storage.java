@@ -46,7 +46,7 @@ public class Storage {
             final_Args.add(t);
         }
         // run StorageServer
-        StorageServer storageServer=new StorageServer(StoragePort);
+        StorageServer storageServer=new StorageServer(StoragePort,Algorithm);
         storageServer.run();
     }
 

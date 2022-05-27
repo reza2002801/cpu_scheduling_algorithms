@@ -13,10 +13,11 @@ public class StorageServer implements Runnable {
     private int port;
     private Socket clientSocket;
     private List<StorageWorkerHandler> StorageWorkerHandler;
-
-    public StorageServer(int port) throws IOException {
+    private String Algorithm;
+    public StorageServer(int port,String Algorithm) throws IOException {
         this.port = port;
         this.StorageWorkerHandler = new ArrayList<>();
+        this.Algorithm = Algorithm;
     }
     @Override
     public void run() {
@@ -24,6 +25,13 @@ public class StorageServer implements Runnable {
             @Override
             public void run() {
                 while (true){
+                    if(Algorithm.equals("FCFC")){
+                        //do sth
+                    }else if(Algorithm.equals("RR")){
+
+                    }else{
+
+                    }
                     // do Master Work
                 }
             }
