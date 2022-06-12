@@ -1,3 +1,5 @@
+package storage;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,7 +7,7 @@ import java.util.List;
 public class Storage {
     static int i=0;
     public static void main(String[] args) throws IOException, InterruptedException {
-        Logger.log(" Storage started");
+        Logger.log(" storage.Storage started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);
@@ -45,7 +47,7 @@ public class Storage {
             Tasks.add(t);
             final_Args.add(t);
         }
-        // run StorageServer
+        // run storage.StorageServer
         StorageServer storageServer=new StorageServer(StoragePort,Algorithm);
         storageServer.run();
     }

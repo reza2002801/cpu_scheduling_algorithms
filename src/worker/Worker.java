@@ -1,11 +1,13 @@
+package worker;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class Worker extends Thread{
     static int i=0;
@@ -17,13 +19,16 @@ public class Worker extends Thread{
     public static DataOutputStream mdos;
     public static DataInputStream sdis;
     public static DataOutputStream sdos;
+    public static String Algorithms;
+    public static String DeadLockMode;
+    static List<String> works;
     public Worker(int masterPort, int storagePort) {
         this.masterPort = masterPort;
         this.storagePort = storagePort;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Logger.log(" Worker started");
+        Logger.log(" worker.Worker started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);
@@ -63,7 +68,8 @@ public class Worker extends Thread{
             Tasks.add(t);
             final_Args.add(t);
         }
-
+        DeadLockMode=deadLockHandler;
+        Algorithms=Algorithm;
         //start worker
         Worker worker=new Worker(masterPort,StoragePort);
         worker.start();
@@ -78,10 +84,20 @@ public class Worker extends Thread{
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                // Do Work
+                while (true) {
+                    if (Algorithms.equals("FCFS") && DeadLockMode.equals("NONE")) {
+                        FCFS_NONE();
+                    }
+                }
             }
         });
         thread.start();
+    }
+    private void FCFS_NONE(){
+        while (!works.isEmpty()) {
+            List<String> list = Arrays.asList(works.get(0).split(" "));
+            System.out.println(list);
+        }
     }
     private void establishConnectionMaster(int masterPort) throws IOException {
         this.mastersocket = new Socket(InetAddress.getLocalHost(), masterPort);

@@ -1,3 +1,5 @@
+package master;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,7 +7,7 @@ import java.util.List;
 public class Master  {
     static int i=0;
     public static void main(String[] args) throws IOException {
-        Logger.log(" Master started");
+        Logger.log(" master.Master started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);
@@ -46,18 +48,18 @@ public class Master  {
             final_Args.add(t);
         }
 
-        // run Master Server
+        // run master.Master Server
         MasterServer masterServer=new MasterServer(masterPort);
         masterServer.run();
 
         //launch storage
         ProcessBuilder p=RunMaster(Storage.class,arguments,final_Args);
-        Logger.log("Storage launched!!!");
+        Logger.log("storage.Storage launched!!!");
         Process s=p.start();
         //launch workers
         for (int j = 0; j < numWorker; j++) {
             RunMaster(Worker.class,arguments,final_Args).start();
-            Logger.log("Worker"+j+" launched!!!");
+            Logger.log("worker.Worker"+j+" launched!!!");
         }
 
 

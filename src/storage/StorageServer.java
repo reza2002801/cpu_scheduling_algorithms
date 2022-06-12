@@ -1,3 +1,5 @@
+package storage;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,7 +34,7 @@ public class StorageServer implements Runnable {
                     }else{
 
                     }
-                    // do Master Work
+                    // do master.Master Work
                 }
             }
         });

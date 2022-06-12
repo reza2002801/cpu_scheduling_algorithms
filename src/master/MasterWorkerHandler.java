@@ -1,16 +1,18 @@
+package master;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class StorageWorkerHandler {
+public class MasterWorkerHandler {
     private int id;
     private Socket clientSocket;
     private DataInputStream dis;
     private DataOutputStream dos;
 
     private int w;
-    public StorageWorkerHandler(int id, Socket clientSocket, DataInputStream dis, DataOutputStream dos) throws IOException {
+    public MasterWorkerHandler(int id, Socket clientSocket, DataInputStream dis, DataOutputStream dos) throws IOException {
         this.w=0;
         this.id = id;
         this.clientSocket = clientSocket;

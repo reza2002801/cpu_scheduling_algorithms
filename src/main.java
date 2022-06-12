@@ -1,3 +1,5 @@
+import master.Master;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class main {
             final_Args.add(t);
         }
         ProcessBuilder p=RunMaster(Master.class,arguments,final_Args);
-        Logger.log("Master launched!!!");
+        Logger.log("master.Master launched!!!");
         Process s=p.start();
         Scanner in=new Scanner(s.getInputStream());
         PrintStream out=new PrintStream(s.getOutputStream());

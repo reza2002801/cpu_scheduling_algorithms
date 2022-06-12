@@ -1,3 +1,5 @@
+package master;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class MasterServer implements Runnable {
             @Override
             public void run() {
                 while (true){
-                        // do Master Work
+                        // do master.Master Work
                 }
             }
         });
