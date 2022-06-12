@@ -1,3 +1,4 @@
+import master.Logger;
 import master.Master;
 
 import java.io.*;
@@ -46,6 +47,7 @@ public class main {
         }
         ProcessBuilder p=RunMaster(Master.class,arguments,final_Args);
         Logger.log("master.Master launched!!!");
+
         Process s=p.start();
         Scanner in=new Scanner(s.getInputStream());
         PrintStream out=new PrintStream(s.getOutputStream());

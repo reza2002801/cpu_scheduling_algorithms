@@ -28,7 +28,7 @@ public class Worker extends Thread{
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Logger.log(" worker.Worker started");
+        workerLogger.log(" worker.Worker started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);

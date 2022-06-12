@@ -1,5 +1,8 @@
 package master;
 
+import storage.Storage;
+import worker.Worker;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +10,7 @@ import java.util.List;
 public class Master  {
     static int i=0;
     public static void main(String[] args) throws IOException {
-        Logger.log(" master.Master started");
+        masterLogger.log(" master.Master 1 started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);

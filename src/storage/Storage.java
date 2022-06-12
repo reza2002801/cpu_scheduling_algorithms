@@ -7,7 +7,7 @@ import java.util.List;
 public class Storage {
     static int i=0;
     public static void main(String[] args) throws IOException, InterruptedException {
-        Logger.log(" storage.Storage started");
+        storageLogger.log(" storage.Storage started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);

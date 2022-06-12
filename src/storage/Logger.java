@@ -1,3 +1,5 @@
+package storage;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Logger {
+public class storageLogger {
     static String name="filename.txt";
-    public static synchronized void log(String l) throws IOException {
+    static synchronized void log(String l) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(" HH:mm:ss.nn");
         LocalDateTime now = LocalDateTime.now();
         try {
