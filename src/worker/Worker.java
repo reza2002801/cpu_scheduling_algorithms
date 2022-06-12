@@ -80,6 +80,11 @@ public class Worker extends Thread{
             establishConnectionStorage(storagePort);
         } catch (IOException e) {
             e.printStackTrace();
+            try {
+                workerLogger.log("failed to establish connection ");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -91,7 +96,7 @@ public class Worker extends Thread{
                 }
             }
         });
-        thread.start();
+//        thread.start();
     }
     private void FCFS_NONE(){
         while (!works.isEmpty()) {
@@ -100,14 +105,26 @@ public class Worker extends Thread{
         }
     }
     private void establishConnectionMaster(int masterPort) throws IOException {
-        this.mastersocket = new Socket(InetAddress.getLocalHost(), masterPort);
-        mdis = new DataInputStream(mastersocket.getInputStream());
-        mdos = new DataOutputStream(mastersocket.getOutputStream());
+        try{
+            this.mastersocket = new Socket(InetAddress.getLocalHost(), masterPort);
+            mdis = new DataInputStream(mastersocket.getInputStream());
+            mdos = new DataOutputStream(mastersocket.getOutputStream());
+            workerLogger.log("success to stablish connction with master");
+        }catch (Exception e){
+            workerLogger.log("faild to stablish connction with master");
+        }
+
+
     }
     private void establishConnectionStorage(int storagePort) throws IOException {
-        this.storageSocket = new Socket(InetAddress.getLocalHost(), storagePort);
-        sdis = new DataInputStream(storageSocket.getInputStream());
-        sdos = new DataOutputStream(storageSocket.getOutputStream());
+        try{
+            this.storageSocket = new Socket(InetAddress.getLocalHost(), storagePort);
+            sdis = new DataInputStream(storageSocket.getInputStream());
+            sdos = new DataOutputStream(storageSocket.getOutputStream());
+            workerLogger.log("success to stablish connction with storage");
+        }catch (Exception e){
+            workerLogger.log("faild to stablish connction with storage");
+        }
     }
 
     public static String arg(String[] t) throws IOException {

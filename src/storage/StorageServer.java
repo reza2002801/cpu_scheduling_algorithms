@@ -20,6 +20,7 @@ public class StorageServer implements Runnable {
         this.port = port;
         this.StorageWorkerHandler = new ArrayList<>();
         this.Algorithm = Algorithm;
+        establishServer();
     }
     @Override
     public void run() {
@@ -38,7 +39,12 @@ public class StorageServer implements Runnable {
                 }
             }
         });
-        thread.start();
+//        thread.start();
+        try {
+            storageLogger.log("start connction in storage");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try{
             listenForNewConnection();
         } catch (IOException e) {

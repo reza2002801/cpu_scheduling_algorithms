@@ -10,7 +10,6 @@ import java.util.List;
 public class Master  {
     static int i=0;
     public static void main(String[] args) throws IOException {
-        masterLogger.log(" master.Master 1 started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);
@@ -44,26 +43,32 @@ public class Master  {
         int TaskNum=Integer.parseInt(arg(args));
         final_Args.add(String.valueOf(TaskNum));
         List<String> Tasks=new ArrayList<String>();
-
         for (int i = 0; i < TaskNum; i++) {
             String t=arg(args);
             Tasks.add(t);
             final_Args.add(t);
         }
 
+
         // run master.Master Server
-        MasterServer masterServer=new MasterServer(masterPort);
-        masterServer.run();
+        try{
+            MasterServer masterServer = new MasterServer(masterPort);
+            masterServer.run();
+        }catch (Exception e) {
+            System.out.println("error running main server");
+        }
 
         //launch storage
         ProcessBuilder p=RunMaster(Storage.class,arguments,final_Args);
-        Logger.log("storage.Storage launched!!!");
+
         Process s=p.start();
+
         //launch workers
         for (int j = 0; j < numWorker; j++) {
             RunMaster(Worker.class,arguments,final_Args).start();
-            Logger.log("worker.Worker"+j+" launched!!!");
+            System.out.println("worker"+String.valueOf(j)+"started!" );
         }
+
 
 
 

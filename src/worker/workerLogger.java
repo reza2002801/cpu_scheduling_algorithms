@@ -1,4 +1,4 @@
-package master;
+package worker;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class masterLogger {
-    static String name="filename.txt";
+public class workerLogger {
+    static String name="filename3.txt";
     public static synchronized void log(String l) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(" HH:mm:ss.nn");
         LocalDateTime now = LocalDateTime.now();
@@ -37,5 +37,4 @@ public class masterLogger {
         }
 
     }
-
 }

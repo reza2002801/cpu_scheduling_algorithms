@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class storageLogger {
-    static String name="filename.txt";
-    static synchronized void log(String l) throws IOException {
+    static String name="filename2.txt";
+    public static synchronized void log(String l) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(" HH:mm:ss.nn");
         LocalDateTime now = LocalDateTime.now();
         try {
@@ -37,5 +37,4 @@ public class storageLogger {
         }
 
     }
-
 }

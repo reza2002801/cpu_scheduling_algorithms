@@ -20,39 +20,54 @@ public class MasterServer implements Runnable {
     public MasterServer(int port) throws IOException {
         this.port = port;
         this.MasterWorkerHandler = new ArrayList<>();
+        establishServer();
     }
     @Override
     public void run() {
-        Thread thread=new Thread(new Runnable() {
+//        Thread thread=new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                        // do master.Master Work
+//                }
+//            }
+//        });
+//        thread.start();
+        Thread connctionThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
-                        // do master.Master Work
+                try{
+                    listenForNewConnection();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
-        thread.start();
-        try{
-            listenForNewConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+
+        connctionThread.start();
+
 
     }
     private void establishServer() throws IOException {
         serverSocket = new ServerSocket(port);
     }
     private void listenForNewConnection() throws IOException {
+//        System.out.println(port);
         while (true) {
             try {
+
                 clientSocket = this.serverSocket.accept();
+
                 DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
                 DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
                 int id = createUid();
                 MasterWorkerHandler workerHandler = new MasterWorkerHandler(id, clientSocket, dis, dos);
                 MasterWorkerHandler.add(workerHandler);
+                System.out.println("worker connected");
 
             } catch (IOException e) {
+                System.out.println("error conncting worker");
                 clientSocket.close();
                 e.printStackTrace();
             }

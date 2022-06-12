@@ -31,7 +31,7 @@ public class MasterWorkerHandler {
                 }
             }
         });
-        thread.start();
+//        thread.start();
     }
     public void Reciever() throws IOException, ClassNotFoundException {
         while (true) {
