@@ -6,54 +6,77 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class StorageServer implements Runnable {
-
+    public static LockManager lockManager;
     private ServerSocket serverSocket;
     private int port;
     private Socket clientSocket;
-    private List<StorageWorkerHandler> StorageWorkerHandler;
+    public volatile static List<StorageWorkerHandler> StorageWorkerHandler;
     private String Algorithm;
     public StorageServer(int port,String Algorithm) throws IOException {
+        sL.log(String.valueOf(port));
+        lockManager=null;
+
         this.port = port;
-        this.StorageWorkerHandler = new ArrayList<>();
+
+        StorageWorkerHandler = new ArrayList<>();
+
         this.Algorithm = Algorithm;
+
         establishServer();
+
     }
     @Override
     public void run() {
-        Thread thread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    if(Algorithm.equals("FCFC")){
-                        //do sth
-                    }else if(Algorithm.equals("RR")){
-
-                    }else{
-
-                    }
-                    // do master.Master Work
-                }
-            }
-        });
-//        thread.start();
+        int[] p=new int[Storage.StorageData.length];
+        Arrays.fill(p,-1);
+        LockManager l=new LockManager(Storage.StorageData,p);
+        this.lockManager=l;
         try {
-            storageLogger.log("start connction in storage");
+            sL.log(l.toString());
+            sL.log(Storage.StorageData.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        try{
-            listenForNewConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    sL.log("start connction in storage");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                try{
+                    listenForNewConnection();
+                } catch (IOException e) {
+                    try {
+                        sL.log(e.getMessage());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+
 
     }
     private void establishServer() throws IOException {
-        serverSocket = new ServerSocket(port);
+        sL.log("jj1");
+        sL.log(String.valueOf(port));
+        try {
+            serverSocket = new ServerSocket(port);
+        }catch (Exception e){
+            sL.log(e.getMessage());
+        }
+
+        sL.log("jjw");
     }
     private void listenForNewConnection() throws IOException {
         while (true) {
@@ -62,9 +85,15 @@ public class StorageServer implements Runnable {
                 DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
                 DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
                 int id = createUid();
-                StorageWorkerHandler storageWorkerHandler = new StorageWorkerHandler(id, clientSocket, dis, dos);
-                StorageWorkerHandler.add(storageWorkerHandler);
+                try {
+                    StorageWorkerHandler storageWorkerHandler = new StorageWorkerHandler(id, clientSocket, dis, dos);
+                    StorageWorkerHandler.add(storageWorkerHandler);
+                }
+                catch (Exception e){
+                    sL.log(e.getMessage());
+                }
 
+                sL.log("worker connected");
             } catch (IOException e) {
                 clientSocket.close();
                 e.printStackTrace();

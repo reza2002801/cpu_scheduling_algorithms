@@ -7,11 +7,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class workerLogger {
-    static String name="filename3.txt";
+    static Random rand = new Random();
+
+    static String name=String.valueOf(rand.nextInt(1000));
     public static synchronized void log(String l) throws IOException {
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(" HH:mm:ss.nn");
         LocalDateTime now = LocalDateTime.now();
         try {

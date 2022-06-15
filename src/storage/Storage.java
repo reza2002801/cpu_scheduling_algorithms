@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
+    static List<Integer> Values=new ArrayList<>();
     static int i=0;
+    public static int[] StorageData;
     public static void main(String[] args) throws IOException, InterruptedException {
-        storageLogger.log(" storage.Storage started");
+        sL.log(" storage.Storage started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);
@@ -36,6 +38,15 @@ public class Storage {
         int StoragePort=Integer.parseInt(arg(args));
         final_Args.add(String.valueOf(StoragePort));
         String storageData=arg(args);
+        String[] temp=storageData.split(" ");
+        int[] tem=new int[temp.length];
+        for (int j = 0; j < temp.length; j++) {
+            tem[j]= Integer.parseInt(temp[j]);
+        }
+        StorageData=tem;
+        for (int j = 0; j <temp.length ; j++) {
+            Values.add(Integer.parseInt(temp[j]));
+        }
 
         final_Args.add(storageData);
         int TaskNum=Integer.parseInt(arg(args));
@@ -47,9 +58,12 @@ public class Storage {
             Tasks.add(t);
             final_Args.add(t);
         }
+
         // run storage.StorageServer
         StorageServer storageServer=new StorageServer(StoragePort,Algorithm);
+
         storageServer.run();
+
     }
 
     public static String arg(String[] t) throws IOException {

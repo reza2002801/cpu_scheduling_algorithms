@@ -13,6 +13,7 @@ public class StorageWorkerHandler {
 
     private int w;
     public StorageWorkerHandler(int id, Socket clientSocket, DataInputStream dis, DataOutputStream dos) throws IOException {
+        sL.log("sdc");
         this.w=0;
         this.id = id;
         this.clientSocket = clientSocket;
@@ -23,6 +24,7 @@ public class StorageWorkerHandler {
             @Override
             public void run() {
                 try {
+                    sL.log("in Reciever from  SWH");
                     Reciever();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -36,7 +38,18 @@ public class StorageWorkerHandler {
     public void Reciever() throws IOException, ClassNotFoundException {
         while (true) {
             String result=dis.readUTF();
+            sL.log("in Reciever from  SWH"+result);
 
+            if(result.equals("LockReq")){
+                int id=Integer.parseInt(dis.readUTF());
+                int index=Integer.parseInt(dis.readUTF());
+                sL.log(String.valueOf(id)+" "+String.valueOf(index));
+                StorageServer.lockManager.handleReq(index,id,this);
+            }
+            else if(result.equals("WorkDone")){
+                int id=Integer.parseInt(dis.readUTF());
+                StorageServer.lockManager.workDone(id);
+            }
         }
     }
 
@@ -58,9 +71,7 @@ public class StorageWorkerHandler {
 
 
 
-    public void sendWork() throws IOException {
-        dos.writeUTF("work");
-
-
+    public void sendResponse(String s) throws IOException {
+        dos.writeUTF(s);
     }
 }

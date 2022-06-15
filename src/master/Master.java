@@ -1,6 +1,7 @@
 package master;
 
 import storage.Storage;
+import task.Task;
 import worker.Worker;
 
 import java.io.IOException;
@@ -8,7 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Master  {
+    static String deadLockHandler;
+    static String Algo;
     static int i=0;
+    public static int num_data;
     public static void main(String[] args) throws IOException {
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
@@ -32,7 +36,9 @@ public class Master  {
             int qTime=Integer.parseInt(s);
 
         }
-        String deadLockHandler=arg(args);
+        Algo=Algorithm;
+        String ddd=arg(args);
+        deadLockHandler=ddd;
         final_Args.add(deadLockHandler);
 
         int StoragePort=Integer.parseInt(arg(args));
@@ -40,20 +46,26 @@ public class Master  {
         String storageData=arg(args);
 
         final_Args.add(storageData);
+        num_data=storageData.split(" ").length;
         int TaskNum=Integer.parseInt(arg(args));
         final_Args.add(String.valueOf(TaskNum));
         List<String> Tasks=new ArrayList<String>();
+        List<Task> ttt=new ArrayList<>();
+
         for (int i = 0; i < TaskNum; i++) {
             String t=arg(args);
             Tasks.add(t);
             final_Args.add(t);
+            ttt.add(new Task(i,t));
         }
+
 
 
         // run master.Master Server
         try{
-            MasterServer masterServer = new MasterServer(masterPort);
+            MasterServer masterServer = new MasterServer(masterPort,ttt);
             masterServer.run();
+            System.out.println("MAsr do");
         }catch (Exception e) {
             System.out.println("error running main server");
         }

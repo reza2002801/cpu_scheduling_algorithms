@@ -1,5 +1,8 @@
 package master;
 
+import Serializer.serializer;
+import task.Task;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,7 +13,7 @@ public class MasterWorkerHandler {
     private Socket clientSocket;
     private DataInputStream dis;
     private DataOutputStream dos;
-
+    private boolean isFull;
     private int w;
     public MasterWorkerHandler(int id, Socket clientSocket, DataInputStream dis, DataOutputStream dos) throws IOException {
         this.w=0;
@@ -18,26 +21,54 @@ public class MasterWorkerHandler {
         this.clientSocket = clientSocket;
         this.dis = dis;
         this.dos = dos;
+        this.isFull=false;
+        System.out.println("worker done");
 
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Reciever();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                while (true) {
+                    try {
+                        Reciever();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        break;
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        break;
+                    }
                 }
             }
         });
-//        thread.start();
+        thread.start();
     }
-    public void Reciever() throws IOException, ClassNotFoundException {
-        while (true) {
-            String result=dis.readUTF();
 
-        }
+    public boolean isFull() {
+        return isFull;
+    }
+
+    public void setFull(boolean full) {
+        isFull = full;
+    }
+
+    public void Reciever() throws IOException, ClassNotFoundException {
+        System.out.println("sx");
+        String result=dis.readUTF();
+        System.out.println("sxas");
+            if(Master.Algo.equals("FCFS")){
+                if(result.equals("workRes")){
+                    Task t= (Task) serializer.fromString(dis.readUTF());
+                    System.out.println(t.toString());
+                    this.isFull=false;
+                }
+            }
+            else if(Master.Algo.equals("SJF")){
+
+            }
+            else if(Master.Algo.equals("RR")){
+
+            }
+
     }
 
     public int getW() {
@@ -58,9 +89,9 @@ public class MasterWorkerHandler {
 
 
 
-    public void sendWork() throws IOException {
+    public void sendWork(Task t) throws IOException {
         dos.writeUTF("work");
-
-
+        dos.writeUTF(serializer.toString(t));
+        setFull(true);
     }
 }
