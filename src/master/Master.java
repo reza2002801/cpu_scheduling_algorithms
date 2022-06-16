@@ -65,7 +65,7 @@ public class Master  {
         try{
             MasterServer masterServer = new MasterServer(masterPort,ttt);
             masterServer.run();
-            System.out.println("MAsr do");
+            System.out.println("MasterServer run and initialize");
         }catch (Exception e) {
             System.out.println("error running main server");
         }

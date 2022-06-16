@@ -1,9 +1,13 @@
 package storage;
 
+import storageLogic.LockManagerFCFS;
+import storageLogic.LockManagerSJF;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class StorageWorkerHandler {
     private int id;
@@ -23,19 +27,34 @@ public class StorageWorkerHandler {
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    sL.log("in Reciever from  SWH");
-                    Reciever();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                if(Storage.Alg.equals("FCFS")){
+                    try {
+                        sL.log("in Reciever from  SWH");
+                        RecieverFCFS();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
+                else if(Storage.Alg.equals("SJF")){
+                    try {
+                        RecieverSJF();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else if(Storage.Alg.equals("RR")){
+
+                }
+
             }
         });
         thread.start();
     }
-    public void Reciever() throws IOException, ClassNotFoundException {
+    public void RecieverFCFS() throws IOException, ClassNotFoundException {
         while (true) {
             String result=dis.readUTF();
             sL.log("in Reciever from  SWH"+result);
@@ -44,11 +63,28 @@ public class StorageWorkerHandler {
                 int id=Integer.parseInt(dis.readUTF());
                 int index=Integer.parseInt(dis.readUTF());
                 sL.log(String.valueOf(id)+" "+String.valueOf(index));
-                StorageServer.lockManager.handleReq(index,id,this);
+                StorageServer.lockManagerFCFS.handleReq(index,id,this);
             }
             else if(result.equals("WorkDone")){
                 int id=Integer.parseInt(dis.readUTF());
-                StorageServer.lockManager.workDone(id);
+                StorageServer.lockManagerFCFS.workDone(id);
+            }
+        }
+    }
+    public void RecieverSJF() throws IOException, ClassNotFoundException {
+        while (true) {
+            String result=dis.readUTF();
+            sL.log("in Reciever from  SWH"+result);
+
+            if(result.equals("LockReq")){
+                int id=Integer.parseInt(dis.readUTF());
+                int index=Integer.parseInt(dis.readUTF());
+                sL.log(String.valueOf(id)+" "+String.valueOf(index));
+                StorageServer.lockManagerSJF.handleReq(index,id,this);
+            }
+            else if(result.equals("WorkDone")){
+                int id=Integer.parseInt(dis.readUTF());
+                StorageServer.lockManagerSJF.workDone(id);
             }
         }
     }

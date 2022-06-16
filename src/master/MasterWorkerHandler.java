@@ -58,12 +58,16 @@ public class MasterWorkerHandler {
             if(Master.Algo.equals("FCFS")){
                 if(result.equals("workRes")){
                     Task t= (Task) serializer.fromString(dis.readUTF());
-                    System.out.println(t.toString());
+                    System.out.println("task "+String.valueOf(t.getId())+" executed successfully with result "+String.valueOf(t.getResult()));
                     this.isFull=false;
                 }
             }
             else if(Master.Algo.equals("SJF")){
-
+                if(result.equals("workRes")){
+                    Task t= (Task) serializer.fromString(dis.readUTF());
+                    System.out.println("task "+String.valueOf(t.getId())+" executed successfully with result "+String.valueOf(t.getResult()));
+                    this.isFull=false;
+                }
             }
             else if(Master.Algo.equals("RR")){
 

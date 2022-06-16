@@ -1,5 +1,9 @@
 package storage;
 
+import storageLogic.LockManagerFCFS;
+import storageLogic.LockManagerRR;
+import storageLogic.LockManagerSJF;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,8 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+
+
 public class StorageServer implements Runnable {
-    public static LockManager lockManager;
+    public static LockManagerFCFS lockManagerFCFS;
+    public static LockManagerSJF lockManagerSJF;
+    public static LockManagerRR lockManagerRR;
     private ServerSocket serverSocket;
     private int port;
     private Socket clientSocket;
@@ -19,33 +27,44 @@ public class StorageServer implements Runnable {
     private String Algorithm;
     public StorageServer(int port,String Algorithm) throws IOException {
         sL.log(String.valueOf(port));
-        lockManager=null;
-
         this.port = port;
-
         StorageWorkerHandler = new ArrayList<>();
-
         this.Algorithm = Algorithm;
-
         establishServer();
-
     }
     @Override
     public void run() {
-        int[] p=new int[Storage.StorageData.length];
-        Arrays.fill(p,-1);
-        LockManager l=new LockManager(Storage.StorageData,p);
-        this.lockManager=l;
-        try {
-            sL.log(l.toString());
-            sL.log(Storage.StorageData.toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(this.Algorithm.equals("FCFS")){
+            int[] p=new int[Storage.StorageData.length];
+            Arrays.fill(p,-1);
+            LockManagerFCFS l=new LockManagerFCFS(Storage.StorageData,p);
+            this.lockManagerFCFS =l;
+            try {
+                sL.log(l.toString());
+                sL.log(Storage.StorageData.toString());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+        else if(this.Algorithm.equals("SJF")){
+            int[] p=new int[Storage.StorageData.length];
+            Arrays.fill(p,-1);
+            LockManagerSJF l=new LockManagerSJF(Storage.StorageData,p);
+            this.lockManagerSJF =l;
+            try {
+                sL.log(l.toString());
+                sL.log(Storage.StorageData.toString());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(this.Algorithm.equals("RR")){
+
+        }
+
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {
-
                 try {
                     sL.log("start connction in storage");
                 } catch (IOException e) {
@@ -64,19 +83,14 @@ public class StorageServer implements Runnable {
             }
         });
         thread.start();
-
-
     }
     private void establishServer() throws IOException {
-        sL.log("jj1");
         sL.log(String.valueOf(port));
         try {
             serverSocket = new ServerSocket(port);
         }catch (Exception e){
             sL.log(e.getMessage());
         }
-
-        sL.log("jjw");
     }
     private void listenForNewConnection() throws IOException {
         while (true) {

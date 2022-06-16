@@ -23,7 +23,6 @@ public class MasterFCFS {
 
         while(!MasterServer.works.isEmpty()){
             while(!canSend());
-            System.out.println();
             send(MasterServer.works.get(0));
             System.out.println(MasterServer.works.get(0)+" sentt");
             MasterServer.works.remove(0);

@@ -7,6 +7,7 @@ import java.util.List;
 public class Storage {
     static List<Integer> Values=new ArrayList<>();
     static int i=0;
+    public static String Alg="";
     public static int[] StorageData;
     public static void main(String[] args) throws IOException, InterruptedException {
         sL.log(" storage.Storage started");
@@ -52,7 +53,7 @@ public class Storage {
         int TaskNum=Integer.parseInt(arg(args));
         final_Args.add(String.valueOf(TaskNum));
         List<String> Tasks=new ArrayList<String>();
-
+        Alg=Algorithm;
         for (int i = 0; i < TaskNum; i++) {
             String t=arg(args);
             Tasks.add(t);

@@ -1,15 +1,18 @@
-package storage;
+package storageLogic;
+
+import storage.StorageWorkerHandler;
+import storage.sL;
 
 import java.io.IOException;
 import java.util.*;
 
-public class LockManager {
-    static HashMap<Integer,StorageWorkerHandler> map=new HashMap<Integer, StorageWorkerHandler>();
+public class LockManagerRR {
+    static HashMap<Integer, StorageWorkerHandler> map=new HashMap<Integer, StorageWorkerHandler>();
     int[] values;
     int[] lockId;
     public List<List<Integer>> requests=new ArrayList<>();
 
-    public LockManager(int[] values, int[] lockId) {
+    public LockManagerRR(int[] values, int[] lockId) {
         for (int i = 0; i < values.length; i++) {
             List<Integer> temp=new ArrayList<>();
             this.requests.add(temp);
@@ -72,6 +75,4 @@ public class LockManager {
 //
 //        }
 //    }
-
-
 }

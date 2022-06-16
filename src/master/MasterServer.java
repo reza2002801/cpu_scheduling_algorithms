@@ -1,6 +1,7 @@
 package master;
 
 import masterlogic.MasterFCFS;
+import masterlogic.MasterSJF;
 import task.Task;
 
 import java.io.DataInputStream;
@@ -56,7 +57,11 @@ public class MasterServer implements Runnable {
                         }
                     }
                     else if(Master.Algo.equals("SJF")){
-
+                        try {
+                            MasterSJF.handleTasks(deadLockHandler);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     else if(Master.Algo.equals("RR")){
 

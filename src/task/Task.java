@@ -1,9 +1,7 @@
 package task;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Task implements Serializable {
 
@@ -87,7 +85,24 @@ public class Task implements Serializable {
 
     public static void main(String[] args) {
         master.Master.num_data=4;
+        List<Task> tasks=new ArrayList<>();
         Task t=new Task(1,"0 1 100 2 100 3");
-        System.out.println(t.toString());
+        Task t1=new Task(1,"50 0 50 1 150 2");
+        Task t2=new Task(1,"50 0 50 1 20 2");
+        tasks.add(t);
+        tasks.add(t1);
+        tasks.add(t2);
+        System.out.println(tasks);
+        Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task t1, Task t2) {
+                if ( t1.getTimeNeed() >= t2.getTimeNeed() )
+                    return 1;
+                else
+                    return -1;
+
+            }
+        });
+        System.out.println(tasks);
     }
 }

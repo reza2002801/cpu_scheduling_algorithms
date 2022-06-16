@@ -1,12 +1,7 @@
 package worker;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Worker extends Thread{
@@ -14,7 +9,7 @@ public class Worker extends Thread{
     public static String Algorithms;
     public static String DeadLockMode;
     public static void main(String[] args) throws IOException, InterruptedException {
-        workerLogger.log(" worker.Worker started");
+        wL.log(" worker.Worker started");
         List<String> final_Args=new ArrayList<>();
         String argNum_temp=arg(args);
         final_Args.add(argNum_temp);

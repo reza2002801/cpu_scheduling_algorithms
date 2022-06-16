@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class workerLogger {
+public class wL {
     static Random rand = new Random();
 
     static String name=String.valueOf(rand.nextInt(1000));

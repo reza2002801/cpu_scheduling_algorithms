@@ -1,14 +1,10 @@
 package workerLogic;
 
 import Serializer.serializer;
-import master.MasterServer;
-import storage.Storage;
-import storage.StorageServer;
-import storage.StorageWorkerHandler;
 import storage.sL;
 import task.Task;
 import worker.WorkerServer;
-import worker.workerLogger;
+import worker.wL;
 
 import java.io.IOException;
 
@@ -19,7 +15,7 @@ public class WorkerFCFS {
 
     public static void handleTasks(String deadLockHandler) throws IOException, InterruptedException {
         deadLockHandler=deadLockHandler;
-        workerLogger.log("in handle Tasks");
+        wL.log("in handle Tasks");
         while(!works.isEmpty()) {
             Task t = null;
             if (deadLockHandler.equals("NONE")) {
@@ -35,7 +31,7 @@ public class WorkerFCFS {
     }
 
     private static Task doWork(Task t) throws InterruptedException, IOException {
-        workerLogger.log("in doWork");
+        wL.log("in doWork");
         for (int i = 0; i < t.getMiniTasks().size(); i++) {
             if(i%2==0){
                 Sleep(t.getMiniTasks().get(i));
@@ -45,14 +41,14 @@ public class WorkerFCFS {
                 t.updateVal(f);
             }
             t.updateTask();
-            workerLogger.log(t.toString());
+            wL.log(t.toString());
         }
         return t;
     }
 
     private static int requestForValue(Integer integer,int id) throws IOException {
         sdos.writeUTF("LockReq");
-        workerLogger.log("LOck requested");
+        wL.log("LOck requested");
         sdos.writeUTF(String.valueOf(id));
         sdos.writeUTF(String.valueOf(integer));
         String result = sdis.readUTF();
